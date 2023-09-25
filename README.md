@@ -12,13 +12,25 @@
 
 **1.Installation of Ubuntu 20.04**
 ubuntu的安装有虚拟机和双系统可以选择。为了后续学习和工作的便利，作者选择安装双系统。相应的教程链接会在下方给出，有需要的读者可以自行安装。需要注意的是，其他版本的ubuntu也可以使用，在此项目中，作者使用的ubuntu版本为20.04。
+
 Link：https://www.bilibili.com/video/BV1554y1n7zv/?spm_id_from=333.999.0.0&vd_source=d933a24fe6d874814e1e9c6a40709b10
 
 
 **2.Installation of ROS-Noetic**
 Ros官方有十分详细的安装文档，需要的读者可以直接Link。需要注意的是，作者在此项目中使用的ubuntu版本为：20.04，因此需要下载对应的ROS版本：Noetic.请在下载时注意版本序号，避免安装错误。
+
 Link: http://wiki.ros.org/noetic/Installation/Ubuntu
 
-
-
+**3. Installation of Intel RealSense SOK**
+在安装完ROS后，SDK的安装是必须的。以下是安装SOK的步骤：
+```
+1. 更新商店以及內核
+   $ sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+2. 从github上下载librealsense 资源
+   $ git clone https://github.com/IntelRealSense/librealsense.git
+3. 进入librealsense包
+   $ cd ~/librealsense/
+4. 安装核心软件包
+   
+```
 
