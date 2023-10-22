@@ -1,4 +1,4 @@
-# ideas-of-depth-camera-d455
+# Application of depth-camera-D455
 ## Introduction
 
 本项目主要记录作者在如何使用Intel Depth Camera D455相机完成一些简单操作的一些心得和遇到的一些问题。Google上有很多相关的优质文章，作者会根据这些优质的内容进行学习，并引用相关链接。由于作者对于这方面也是初学者，若在描述过程中产生问题，欢迎纠错，您的疑问将是我学习的动力。
@@ -21,8 +21,8 @@ Ros官方有十分详细的安装文档，需要的读者可以直接Link。需�
 
 Link: http://wiki.ros.org/noetic/Installation/Ubuntu
 
-**3. Installation of Intel RealSense SOK**
-在安装完ROS后，SDK的安装是必须的。以下是安装SOK的步骤：
+**3. Installation of Intel RealSense SDK**
+在安装完ROS后，SDK的安装是必须的。以下是安装SDK的步骤：
 ```
 1. 更新商店以及內核
     sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
