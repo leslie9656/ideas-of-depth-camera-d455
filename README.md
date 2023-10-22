@@ -42,7 +42,7 @@ Link: http://wiki.ros.org/noetic/Installation/Ubuntu
     cmake ../ -DBUILD_EXAMPLES=true
     sudo make uninstall && make clean && make && sudo make install
 ```
-5. 测试安装结果
+5. 测试安装结果（源神启动）
 ```
     realsense-viewer 
 ```
@@ -70,15 +70,15 @@ Link: http://wiki.ros.org/noetic/Installation/Ubuntu
     echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
     source ~/.bashrc
 7. 为SLAM（同步定位与建图）安装软件包
-    sudo apt-get install ros-melodic-imu-filter-madgwick
-    sudo apt-get install ros-melodic-rtabmap-ros
-    sudo apt-get install ros-melodic-robot-localization
+    sudo apt-get install ros-noetic-imu-filter-madgwick
+    sudo apt-get install ros-noetic-rtabmap-ros
+    sudo apt-get install ros-noetic-robot-localization
 ```
 **5. 测试安装的软件**
 在安装完所有资源后，接通相机。
 ```
 1. 查询点云
-    roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
+    roslaunch realsense2_camera rs_camera.launch (后面可以加个filters:=pointcloud来查看点云）
 2. 打开另一个终端
     rviz
 ```
@@ -88,3 +88,46 @@ Rviz启动后，执行以下步骤：
 2. 在/color -> /image_raw下双击Image
 3. 在/depth -> /color -> /points下双击PointCloud2
 4. 点击Ok
+
+## Launching ORB_SLAM2 by D455 at ROS
+ORB_SLAM2算法主要用于标定图像内物体的特征点。通过ORB_SLAM2算法，我们可以得到图像内物体的特征点，便于进一步对物体进行识别。以下是实现过程。
+
+```
+cd ~/catkin_ws/src/
+git clone https://github.com/appliedAI-Initiative/orb_slam_2_ros.git
+cd ..
+catkin_make
+source devel/setup.bash
+roslaunch realsense2_camera rs_rgbd.launch
+//新增一个窗口
+rosrun tf static_transform_publisher 0.011 0.048 0.015 0 0 0 base_link camera_link 100
+//新增一个窗口
+roslaunch orb_slam2_ros orb_slam2_d435_rgbd.launch
+//新增一个窗口
+rviz
+//新增一个窗口
+rosrun rqt_tf_tree rqt_tf_tree
+//新增一个窗口
+rostopic list
+rostopic echo /orb_slam2_rgbd/pose
+```
+
+## Launching YOLOV5 algorithm by D455 
+YOLOV5 算法用于给图像内物体标定标签和 rrounding box。以下为实现过程。
+在这里，我们使用了conda虚拟环境。这个环境可以方便我们对与安装和卸载后续不必要的依赖。以下是配置conda的过程。需要注意，这里已经默认了你已经安装好了accoconda。
+```
+conda activate -n Yolov5 python=3.8
+conda activate Yolov5
+```
+这样你就进入到一个名为Yolov5的虚拟环境内。接下来是Yolov5的实现。
+```
+cd ~/catkin_ws/src/
+git clone  https://github.com/killnice/yolov5-D435i.git
+cd ..
+catkin_make
+cd yolov5-D435i
+conda activate Yolov5
+pip install -r requirements.txt
+pip install pyrealsense2
+python main_debug.py
+```
