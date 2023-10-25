@@ -131,3 +131,36 @@ pip install -r requirements.txt
 pip install pyrealsense2
 python main_debug.py
 ```
+
+## Recording the ROS bag with D455
+在这里，作者希望记录带有特征点的topic，过程如下：
+```
+cd ~/catkin_ws/src/
+roslaunch realsense2_camera rs_rgbd.launch
+//新增一个窗口
+rosrun tf static_transform_publisher 0.011 0.048 0.015 0 0 0 base_link camera_link 100
+//新增一个窗口
+roslaunch orb_slam2_ros orb_slam2_d435_rgbd.launch
+//新增一个窗口
+rviz
+//新增一个窗口
+rosrun rqt_tf_tree rqt_tf_tree
+//新增一个窗口
+rostopic list
+rostopic echo /orb_slam2_rgbd/pose
+//开始录包
+rosbag record /orb_slam2_rgbd/debug_image
+```
+
+## 对于记录好的包进行抽帧
+```
+cd ~/catkin_ws/src/
+roslaunch out1.launch
+```
+照片会被保存在~/.ros文件夹中
+
+## 使用d455完成深度相机视频录制
+```
+cd ~/catkin_ws/src/
+rosrun D455_get_RGB_Video_Capture.py
+```
