@@ -164,3 +164,14 @@ roslaunch out1.launch
 cd ~/catkin_ws/src/
 rosrun D455_get_RGB_Video_Capture.py
 ```
+
+
+## D455 imu topic 调出
+```
+roslaunch realsense2_camera rs_camera.launch
+roslaunch realsense2_camera rs_camera.launch enable_gyro:=true
+roslaunch realsense2_camera rs_camera.launch enable_gyro:=true enable_accel:=true
+roslaunch realsense2_camera rs_camera.launch enable_gyro:=true enable_accel:=true unite_imu_method:=linear_interpolation
+rostopic echo /camera/imu
+```
+
