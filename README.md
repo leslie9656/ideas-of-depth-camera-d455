@@ -12,7 +12,7 @@
 
 **1.Installation of Ubuntu 20.04**
 ubuntu的安装有虚拟机和双系统可以选择。为了后续学习和工作的便利，作者选择安装双系统。相应的教程链接会在下方给出，有需要的读者可以自行安装。需要注意的是，其他版本的ubuntu也可以使用，在此项目中，作者使用的ubuntu版本为20.04。
-
+100 Mb/秒s
 Link：https://www.bilibili.com/video/BV1554y1n7zv/?spm_id_from=333.999.0.0&vd_source=d933a24fe6d874814e1e9c6a40709b10
 
 
@@ -166,7 +166,7 @@ rosrun D455_get_RGB_Video_Capture.py
 ```
 
 
-## D455 imu topic 调出
+## D455 imu topic 调出并结合rtabmap使用
 ```
 roslaunch realsense2_camera rs_camera.launch
 roslaunch realsense2_camera rs_camera.launch enable_gyro:=true
@@ -174,4 +174,31 @@ roslaunch realsense2_camera rs_camera.launch enable_gyro:=true enable_accel:=tru
 roslaunch realsense2_camera rs_camera.launch enable_gyro:=true enable_accel:=true unite_imu_method:=linear_interpolation
 rostopic echo /camera/imu
 ```
+此时，imu处于打开状态
 
+接下来，将imu转换成odom，为lidar开始mapping作准备.
+link:http://wiki.ros.org/rtabmap_ros/Tutorials/HandHeldMapping
+```
+roslaunch realsense2_camera rs_camera.launch \
+    align_depth:=true \
+    unite_imu_method:="linear_interpolation" \
+    enable_gyro:=true \
+     enable_accel:=true
+
+rosrun imu_filter_madgwick imu_filter_node \
+    _use_mag:=false \
+    _publish_tf:=false \
+    _world_frame:="enu" \
+    /imu/data_raw:=/camera/imu \
+    /imu/data:=/rtabmap/imu
+
+roslaunch rtabmap_launch rtabmap.launch \
+    rtabmap_args:="--delete_db_on_start --Optimizer/GravitySigma 0.3" \
+    depth_topic:=/camera/aligned_depth_to_color/image_raw \
+    rgb_topic:=/camera/color/image_raw \
+    camera_info_topic:=/camera/color/camera_info \
+    approx_sync:=false \
+    wait_imu_to_init:=true \
+    imu_topic:=/rtabmap/imu
+```
+完成imu转odom。
